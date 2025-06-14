@@ -14,17 +14,17 @@ Then you'll create the database using the below command
 	CREATE DATABASE churchschema;
 Exit MySQL with `quit`
 Finally you'll restore the database using the sql_backup.sql file from the cloned repo. Using the same path from before, your command would look something like this
-	mysql -h 127.0.0.1 -P 3066 -u <username> -p churchschema < C:\Users\Nate\Downloads\proj_downloads\sql_backup.sql
+	mysql -h 127.0.0.1 -P 3306 -u <username> -p churchschema < C:\Users\Nate\Downloads\proj_downloads\sql_backup.sql
 
 Now we'll clone our coding repo.
 Open git bash and run the below commands to clone the repo into your preferred location in which you'd like the project to be stored. For this walkthrough we'll use the directory in the command below
 	cd C:\Users\Nate\Coding
-	git clone https://github.com/FoggyJ18/church_wp.git
-	cd church_wp
+	git clone https://github.com/citorg/volunteer_mgmt-wp.git
+	cd volunteer_mgmt-wp
 	git checkout master
 
 Next we'll configure your wordpress site to talk to the database you just restored. We'll repeat the nonstandard parameters used above for completeness.
-In Notepad++ open C:\Users\Nate\Coding\church_wp\html\churchy\wp-config-sample.php and set each of the keys to the values represented below
+In Notepad++ open C:\Users\Nate\Coding\volunteer_mgmt-wp\html\churchy\wp-config-sample.php and set each of the keys to the values represented below
 	DB_NAME=churchschema
 	DB_USER=Nate
 	DB_PASSWORD=<password for the user you created (NOT root)>
@@ -32,18 +32,18 @@ In Notepad++ open C:\Users\Nate\Coding\church_wp\html\churchy\wp-config-sample.p
 Once updated, ctrl+alt+s to SAVE AS this file and then update its name to wp-config.php (in the same directory as the original sample)
 
 Finally we'll tell nginx where to look for the the webpages
-In Notepad++ open C:\Users\Nate\Coding\church_wp\conf\nginx-sample.conf and in the 2 locations you see "root" uncommented (without a leading # on the line) add the following directories (include the quotes!!)
-	<root wp directory>="C:/users/Nate/Coding/church_wp/html/churchy"
-	<root nginx directory>="C:/users/Nate/Coding/church_wp/html"
+In Notepad++ open C:\Users\Nate\Coding\volunteer_mgmt-wp\conf\nginx-sample.conf and in the 2 locations you see "root" uncommented (without a leading # on the line) add the following directories (include the quotes!!)
+	<root wp directory>="C:/users/Nate/Coding/volunteer_mgmt-wp/html/churchy"
+	<root nginx directory>="C:/users/Nate/Coding/volunteer_mgmt-wp/html"
 Once updated, ctrl+alt+s to SAVE AS this file and then update its name to nginx.conf (in the same directory as the original sample)
 
 Now that everything's configured, let's see it run!
 
 Open 3 cmd windows NOT as admin. In the first one run
-	cd C:/users/Nate/Coding/church_wp/php
+	cd C:/users/Nate/Coding/volunteer_mgmt-wp/php
 	php-cgi.exe -b 127.0.0.1:9123
 In the other 2, run
-	cd C:/users/Nate/Coding/church_wp/
+	cd C:/users/Nate/Coding/volunteer_mgmt-wp/
 And then in one of the last 2 run `nginx.exe` and this will start the webserver. Now you can open a web browser (Chrome, Safari, Firefox) and navigate to http://127.0.0.1:8080/wp-login.php and you should be presented with the login screen. Here you can login using the creds the team can provide.
 
 When you're finished, you can use that 3rd cmd window to run `nginx -s stop` and it will kill the webserver service. In the `php-cgi` window, you can ctrl+c and it will cancel.
